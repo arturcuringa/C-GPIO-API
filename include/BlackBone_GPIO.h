@@ -28,9 +28,9 @@ class BlackBone_GPIO
                 std::string GPIO_PATH = "/sys/class/gpio/";
                 std::string shell_exec(const char* cmd);
         public:
-                BlackBone_GPIO(const std::string port, GPIO SIG);
+                BlackBone_GPIO();
 
-                void setup(const std::string port, const GPIO Sig );
+                void setup(const std::string port, const GPIO SIG );
                 void output(const std::string port , const GPIO Sig);
                 unsigned int input(const std::string port);
 };
