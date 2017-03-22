@@ -1,8 +1,9 @@
 #include "BlackBone_GPIO.h"
 
+
 BlackBone_GPIO::BlackBone_GPIO()
 {
-       
+
 }
 
 void BlackBone_GPIO::setup(const std::string port, const GPIO SIG )
@@ -80,3 +81,24 @@ std::string BlackBone_GPIO::shell_exec(const char* cmd) {
     }
     return result;
 }
+
+// BlackBone_GPIO::const_aux(std::string cmd){
+// 		int n_port = stoi(port);
+//                 chdir(GPIO_PATH.c_str());
+//                 std::string  folderr;
+//                 folderr = "/gpio" + port;
+//                 struct stat sb;
+//                 std::string cmd;
+//                 if(!(stat(folderr.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode) ))
+//                 {
+//                 	cmd = "echo " + port + " > export";
+//                         std::cout<< cmd <<std::endl;
+//                         shell_exec(cmd.c_str());
+//                 }
+//                 std::string dir = GPIO_PATH + "/gpio" + port;
+//                 chdir(dir.c_str());
+//                 cmd = "echo in > direction";
+//                 shell_exec(cmd.c_str());
+//                  break;
+// }
+
