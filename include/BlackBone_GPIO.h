@@ -12,25 +12,27 @@
 #include <fstream>
 #include <unistd.h>
 #include <algorithm>
+#include <sys/stat.h>
+
 enum GPIO{
-	IN,
-	OUT,
-	HIGH,
-	LOW
+        IN,
+        OUT,
+        HIGH,
+        LOW
 
 };
 
 class BlackBone_GPIO
 {
-	private:
-		std::string GPIO_PATH = "/sys/class/gpio/";
-		std::string shell_exec(const char* cmd);
-	public:
-		BlackBone_GPIO(const std::string port, GPIO SIG);
+        private:
+                std::string GPIO_PATH = "/sys/class/gpio/";
+                std::string shell_exec(const char* cmd);
+        public:
+                BlackBone_GPIO(const std::string port, GPIO SIG);
 
-		void setup(const std::string port, const GPIO Sig );
-		void output(const std::string port , const GPIO Sig);
-		unsigned int input(const std::string port);
+                void setup(const std::string port, const GPIO Sig );
+                void output(const std::string port , const GPIO Sig);
+                unsigned int input(const std::string port);
 };
 
 
