@@ -67,7 +67,13 @@ void BlackBone_GPIO::output(const std::string port, const GPIO SIG )
 
 unsigned BlackBone_GPIO::input(const std::string port)
 {
-        //STUB
+        std::fstream fs;
+        std::string dir = GPIO_PATH + "/gpio" + port;
+        fs.open(dir + "/value" ,std::fstream::in | std::fstream::out | std::fstream::app);
+        std::string input;
+        getline(fs, input);
+        return atoi(input.c_str());
+
 }
 
 std::string BlackBone_GPIO::shell_exec(const char* cmd) {
