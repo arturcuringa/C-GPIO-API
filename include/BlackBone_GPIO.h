@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <algorithm>
 #include <sys/stat.h>
+#include <map>
 
 enum GPIO{
         IN,

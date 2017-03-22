@@ -13,8 +13,8 @@
 
 int main ()
 {
-	BlackBone_GPIO GPIO("50", GPIO::OUT);
-	GPIO.output("50", GPIO::HIGH);
+	BlackBone_GPIO gpio("50", GPIO::OUT);
+	gpio.output("50", GPIO::HIGH);
 
 	return 0;
 }
