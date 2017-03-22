@@ -28,7 +28,7 @@ class BlackBone_GPIO
         private:
                 std::string GPIO_PATH = "/sys/class/gpio/";
                 std::string shell_exec(const char* cmd);
-        		std::map<std::string, int> GPIOSystem::pinToIO = {
+        		std::map<std::string, int> pinToIO = {
 					{"P9_11", 30},
 					{"P9_12", 60},
 					{"P9_13", 31},
