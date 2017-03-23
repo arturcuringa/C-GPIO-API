@@ -3,12 +3,7 @@
 
 #include <cstdio>
 #include <iostream>
-#include <sstream>
-#include <memory>
-#include <stdexcept>
 #include <string>
-#include <array>
-#include <queue>
 #include <fstream>
 #include <unistd.h>
 #include <algorithm>
@@ -16,11 +11,10 @@
 #include <map>
 
 enum GPIO{
-        IN,
-        OUT,
-        HIGH,
-        LOW
-
+    IN,
+    OUT,
+    HIGH,
+    LOW
 };
 
 class BlackBone_GPIO
