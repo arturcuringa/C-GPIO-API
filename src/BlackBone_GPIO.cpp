@@ -48,16 +48,16 @@ void BlackBone_GPIO::output(const std::string port, const GPIO SIG )
         std::string dir = GPIO_PATH + "/gpio" + port;
        // chdir(dir.c_str());
     	std::fstream fs;
-        switch(SIG)
+        if(SIG == GPIO::HIGH || SIG == GPIO::LOW )
         {
         	fs.open(dir + "/value" ,std::fstream::in | std::fstream::out | std::fstream::app);
-            case GPIO::HIGH:
+            if( SIG == GPIO::HIGH )
             {
         		                    
                 fs << 1;
 
             }
-            case GPIO::LOW:
+            if( SIG == GPIO::LOW )
             {
                 fs << 0;
            	}
@@ -76,17 +76,17 @@ unsigned BlackBone_GPIO::input(const std::string port)
 
 }
 
-std::string BlackBone_GPIO::shell_exec(const char* cmd) {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) throw std::runtime_error("popen() failed!");
-    while (!feof(pipe.get())) {
-        if (fgets(buffer.data(), 128, pipe.get()) != NULL)
-            result += buffer.data();
-    }
-    return result;
-}
+// std::string BlackBone_GPIO::shell_exec(const char* cmd) {
+//     std::array<char, 128> buffer;
+//     std::string result;
+//     std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+//     if (!pipe) throw std::runtime_error("popen() failed!");
+//     while (!feof(pipe.get())) {
+//         if (fgets(buffer.data(), 128, pipe.get()) != NULL)
+//             result += buffer.data();
+//     }
+//     return result;
+// }
 
 // BlackBone_GPIO::const_aux(std::string cmd){
 // 		int n_port = stoi(port);
