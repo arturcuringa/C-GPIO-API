@@ -9,28 +9,31 @@
 #include <dirent.h>
 #include <vector>
 
-bool is_number(const std::string& s){
-    std::string::const_iterator it = s.begin();
-    	while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
-}
+/**
+* \brief is_number check if string cointains a number or not
+*  @param s string with number 
+*  \return True: s contains a number, False: s dosen't contain a number	 
+*/
+bool is_number(const std::string& s);
 
-bool ProcessEntity(struct dirent* entity){
-    if(entity->d_type == DT_DIR){
-        if(entity->d_name[0] != '.'){
-            if(is_number(std::string(entity->d_name)))
-            	return stoi(std::string(entity->d_name)) > 100 ;
-        }
-    }return false;
-}
-double abs(double x1)
-{
-	if(x1 < 0)
-		return -1 * x1;
-	return x1;
-}
+/**
+* \brief Check if the process is valid and is not from system
+*  @param struct dirent* entity struct checking if is a valid folder 
+*  \return True: entity is a valid process, not a configuration file, False: isin't a folder, probabily configuration file, or hidden folder	 
+*/
+bool ProcessEntity(struct dirent* entity);
 
-/*------------------------------*/
+
+/**
+* \brief Absolute value for real numbers
+*   \return |x|
+*/
+double abs(double x1);
+
+/**
+* \brief Process struct contains PID as a string, int info as a cpu_usage/time of process in jiff and double total, total cpu usage of process, using /proc/<PID>/stat
+*  	 
+*/
 struct Process
 {
 	std::string pid;
@@ -38,104 +41,41 @@ struct Process
 	double total;
 };
 
-bool comp(Process a, Process b){
-	return a.total > b.total;
-}
+/**
+* \brief Comparation method for Process struct
+*	@param Process a First Process
+*	@param Process b Second Process
+*  \return True: Process a.total > Process b.total	 
+*/
+bool comp(Process a, Process b);
 
-std::pair<int,int> getCPUtime()
-{
-		std::fstream fs;
-		fs.open("/proc/stat" ,std::fstream::in);
-		std::string r;
-		getline(fs,r);
-		std::stringstream ss;
-		ss << r;
-		std::string name;
-		ss >> name;
-		int user, nice, system, idle;
-		ss >> user >> nice >> system >> idle ;
-		std::pair<int,int> x(user + nice + system,  user + nice + system + idle);
-		fs.close();
-		return x;
-}
+/**
+* \brief Return CPU_time in format user + nice + syste /,  user + nice + system + idle from /proc/stat
+* \return std::pair<int,int> CPU time 
+*/
+std::pair<int,int> getCPUtime();
 
-double getCPUusage()
-{
-	std::pair<double, double> t1 = getCPUtime();
-	sleep(1);
-	std::pair<double, double> t2 = getCPUtime();	
-	return (((t2.first - t1.first) / ( t2.second - t1.second) ) ) * 100;
-}
+/**
+* \brief Calculates total CPU usage in porcentage with getCpuTime()	 
+*/
+double getCPUusage();
 
-int diffCPUtime(std::pair<int,int>t1 ,std::pair<int,int> t2 ){
-	return  ( t2.second - t1.second);
-}
+/**
+* \brief Calculates the Total CPU usage in JIFF, not in procentage 
+*  \return CPU usage
+*/
+int diffCPUtime(std::pair<int,int>t1 ,std::pair<int,int> t2 );
 
-int getProcessCPUusage(std::string pid)
-{
-	std::fstream fs;
-	std::string input;
-	std::stringstream ss;
-	fs.open("/proc/"+std::string(pid)+std::string("/stat") ,std::fstream::in);
-	getline(fs,input);
-	
-	ss << input;
-	
-	int utime = 0, stime = 0;
-	for(int i=0; ss>>input; ++i){
-		if(i>12){
-			std::stringstream ss2(input);
-			if(i==13){
-				ss2>>utime;
-			}else if(i==14){
-				ss2>>stime;
-				break;
-			}
-		}
-	}
-	fs.close();
-	return (utime + stime);;
-}
+/**
+* \brief Calculates the Process CPU usage with /proc/<pid>/stat 
+*	@param pid process ID - PID
+*  \return Process usage
+*/
+int getProcessCPUusage(std::string pid);
 
-std::string biggestCPUusage(){
-	std::string dirToOpen = "/proc";
-	std::vector<Process> processes;
- 	
-	dirent *d;
-	DIR *dp;
+/**
+* \brief Iterates in /proc/ folder and gets the process with the biggest CPU_Usage using getProcessCPUusage
+*	\return PID of the process with the biggest CPU usage in string format
+*/
+std::string biggestCPUusage();
 
-	Process p;
-	std::pair<double, double> t1 = getCPUtime();
-
-	if((dp = opendir(dirToOpen.c_str())) != NULL){
-		while((d = readdir(dp)) != NULL){
-			if(ProcessEntity(d)){	
-				p.pid=std::string(d->d_name);
-				p.info = getProcessCPUusage(std::string(d->d_name));
-				processes.push_back(p);
-
-			}
-		}
-	}else{
-		std::cout<<"ERROR /PROC"<<std::endl;
-		return "-1";
-	}
-	//sleep(1);
-
-	std::pair<double, double> t2 = getCPUtime();	
-	
-	if((dp = opendir(dirToOpen.c_str())) != NULL){
-		for(int i=0; i<processes.size(); ++i){
-			if((d = readdir(dp)) != NULL){
-
-				processes[i].total= 100*( std::abs(getProcessCPUusage(std::string(d->d_name)) - processes[i].info) / 
-									std::abs( diffCPUtime(t1,t2) ) );
-				
-			}else{
-				processes[i].total=0;
-			}
-		}
-	}
-	std::sort(processes.begin(),processes.end(),comp);
-	return (processes.empty() ? "-1": processes[0].pid);
-}

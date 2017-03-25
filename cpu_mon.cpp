@@ -50,7 +50,7 @@ int main()
 			if(_GPIO.input("P9_27"))
 			{
 				std::string p = biggestCPUusage(); 
-				std::cout<< p << std:;endl;
+				std::cout<< p << std::endl;
 				kill(stoi(p),SIGQUIT);
 			}
 			else

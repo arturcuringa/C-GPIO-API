@@ -10,6 +10,9 @@
 #include <sys/stat.h>
 #include <map>
 
+/**
+ *  \brief	Enum usage for setup, output functions
+ */
 enum GPIO{
     IN,
     OUT,
@@ -20,7 +23,13 @@ enum GPIO{
 class BlackBone_GPIO
 {
     private:
+    	/**
+		 *  \brief	default GPIO folder
+		 */
         std::string GPIO_PATH = "/sys/class/gpio/";
+		/**
+		 *  \brief	Pin map
+		 */
 		std::map<std::string, int> pinToIO = {
 			{"P9_11", 30},
 			{"P9_12", 60},
@@ -89,10 +98,27 @@ class BlackBone_GPIO
 		};
 
     public:
+    	/**
+		 * \brief Default Constructor
+		 */
 		BlackBone_GPIO();
 
+		/**
+		 * \brief Setup method for export, and set direction (input/output of GPIO)
+		 *	@param port string representing the port of BeagleBone, format: "P9_50"
+		 *	@param SIG GPIO enum for setup the direction of GPIO port example GPIO::OUT	 
+		 */
 		void setup(const std::string port, const GPIO SIG );
+		/**
+		 * \brief Output method, setting GPIO::HIGH or GPIO::LOW 
+		 *	@param port string representing the port of BeagleBone, format: "P9_50"
+		 *	@param SIG GPIO enum setting HIGH or LOW for GPIO port example GPIO::HIGH	 
+		 */
 		void output(const std::string port , const GPIO Sig);
+		/**
+		 * \brief Input method, getting the input of GPIO port 
+		 * \return Returns the status of GPIo port int as a unsigned int (1.0)	 
+		 */
 		unsigned int input(const std::string port);
 };
 
